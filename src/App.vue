@@ -1,6 +1,11 @@
 <template>
   <div id="app">
-    <img id="text-img" src="./assets/testocr.png" />
+    <div>
+      <button @click="lang = 'he'">Hebrew sample</button>
+      <button @click="lang = 'en'">English sample</button>
+    </div>
+    <img v-if="lang == 'he'" id="text-img" src="./assets/he.png" />
+    <img v-else id="text-img" src="./assets/en.png" />
     <button v-on:click="recognize">recognize</button>
 
     <div v-if="status">
@@ -23,6 +28,7 @@ export default {
   name: "app",
   data() {
     return {
+      lang: "he",
       progress: 0,
       status: "",
       result: "",
@@ -33,15 +39,15 @@ export default {
       const img = document.getElementById("text-img");
       console.log(img);
       await worker.load();
-      await worker.loadLanguage("eng");
-      await worker.initialize("eng", OEM.LSTM_ONLY);
+      const lang = this.lang == "he" ? "heb" : "eng";
+      await worker.loadLanguage(lang);
+      await worker.initialize(lang, OEM.LSTM_ONLY);
       await worker.setParameters({
         tessedit_pageseg_mode: PSM.SINGLE_BLOCK,
       });
-      const {
-        data: { text },
-      } = await worker.recognize(img);
-      this.result = text;
+      const { data } = await worker.recognize(img);
+      console.log(data);
+      this.result = data.text;
       this.status = "";
     },
   },
