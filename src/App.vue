@@ -1,11 +1,15 @@
 <template>
-  <div id="app">
+  <div id="app" class="bg-gray-500">
     <div>
       <button @click="lang = 'he'">Hebrew sample</button>
       <button @click="lang = 'en'">English sample</button>
     </div>
-    <img v-if="lang == 'he'" id="text-img" src="./assets/he.png" />
-    <img v-else id="text-img" src="./assets/en.png" />
+
+    <div class="relative">
+      <img v-if="lang == 'he'" id="text-img" src="./assets/he.png" />
+      <img v-else id="text-img" src="./assets/en.png" />
+    </div>
+
     <button v-on:click="recognize">recognize</button>
 
     <div v-if="status">
