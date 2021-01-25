@@ -15,6 +15,7 @@
       />
       <img v-else id="text-img" src="./assets/en.png" class="max-w-full" />
       <canvas id="canvas" class="absolute top-0 max-w-full"/>
+      <p  class="text-sm info" v-if="result">Each words bounding box opacity shows the amount of confidence in the recognized word</p>
     </div>
 
     <div class="mt-8 text-center">
@@ -33,7 +34,9 @@
 
     <div v-show="result" class="mt-8">
       <h1 class="text-2xl font-bold text-center">Result</h1>
+      <p class="text-sm info" >This is the recognized text rendered back in the same layout as the source</p>
       <canvas id="result-canvas" class="mt-2"/>
+      <p class="mt-4 text-sm info" >This is the recognized text as editable text</p>
       <p
         class="max-w-md mx-auto mt-2"
         :dir="lang == 'en' ? 'ltr' : 'rtl'"
@@ -42,6 +45,8 @@
         {{ result }}
       </p>
     </div>
+
+    <p class="mt-12 info">Code is available on <a href="https://github.com/Yiddishe-Kop/browser-ocr.git" class="underline">GitHub</a></p>
   </div>
 </template>
 
@@ -96,6 +101,7 @@ export default {
         ctx.strokeWidth = 2;
 
         ctx.strokeStyle = "red";
+        ctx.globalAlpha = w.confidence / 100
         ctx.strokeRect(b.x0, b.y0, b.x1 - b.x0, b.y1 - b.y0);
         ctx.beginPath();
         ctx.moveTo(w.baseline.x0, w.baseline.y0);
@@ -124,5 +130,8 @@ export default {
 <style>
 .transition-width {
   transition: width 0.3s ease-in;
+}
+.info {
+  @apply text-center bg-yellow-100 p-2 rounded text-yellow-900;
 }
 </style>
