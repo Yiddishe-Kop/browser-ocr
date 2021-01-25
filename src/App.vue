@@ -1,25 +1,36 @@
 <template>
-  <div id="app" class="bg-gray-500">
-    <div>
+  <div id="app" class="py-8">
+    <h1 class="text-3xl font-bold text-center">OCR in the browser 🤯</h1>
+    <div class="flex items-center justify-center mt-8 space-x-2">
       <button @click="lang = 'he'">Hebrew sample</button>
       <button @click="lang = 'en'">English sample</button>
     </div>
 
-    <div class="relative">
-      <img v-if="lang == 'he'" id="text-img" src="./assets/he.png" />
-      <img v-else id="text-img" src="./assets/en.png" />
+    <div class="relative mt-8">
+      <img
+        v-if="lang == 'he'"
+        id="text-img"
+        src="./assets/he.png"
+        class="mx-auto"
+      />
+      <img v-else id="text-img" src="./assets/en.png" class="mx-auto" />
     </div>
 
-    <button v-on:click="recognize">recognize</button>
+    <div class="mt-8 text-center">
+      <button v-on:click="recognize">recognize</button>
+    </div>
 
-    <div v-if="status">
+    <div v-if="status" class="flex flex-col items-center mt-8 space-y-2">
       <label for="ocr-progress">{{ status }}...</label>
-      <progress id="ocr-progress" :value="progress" max="100">
-        {{ progress }}%
-      </progress>
+      <div class="relative h-4 overflow-hidden bg-gray-200 rounded-full w-96">
+        <div class="absolute left-0 h-full bg-green-500 transition-width" :style="`width: ${ progress }%`"></div>
+      </div>
     </div>
 
-    <p v-if="result">{{ result }}</p>
+    <div v-if="result" class="mt-8">
+      <h1 class="text-2xl font-bold text-center">Result</h1>
+      <p class="max-w-md mx-auto mt-2" :dir="lang == 'en' ? 'ltr' : 'rtl'" contenteditable>{{ result }}</p>
+    </div>
   </div>
 </template>
 
@@ -66,3 +77,9 @@ export default {
   },
 };
 </script>
+
+<style>
+.transition-width {
+  transition: width 0.3s ease-in;
+}
+</style>
